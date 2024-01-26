@@ -71,14 +71,14 @@ def main():
         tags.append(tag_obj)
 
     if args.notes:
-        notes = session.query(Note).join(Note.tags).filter(
+        notes = session.query(Note).filter(
             Note.notebook == notebook.id,
         )
         if len(notes.all()) == 0:
             print(f"No notes found in {notebook.name} notebook")
             exit(0)
         if len(tags) > 0:
-            notes = notes.filter(Tag.name.in_([tag.name for tag in tags]))
+            notes = notes.join(Note.tags).filter(Tag.name.in_([tag.name for tag in tags]))
         for note in notes:
             print(note)
         exit(0)
